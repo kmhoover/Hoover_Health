@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endpoint Health</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="home-page">
+    <div class="navbar">
+        <button class="button dropbtn" onclick="toggleScanLinks(event)">Scan Results</button>
+        <div class="dropdown-content" id="scanLinks">
+            <a href="#" onclick="return false;"><b>Scan Results</b></a>
+            <a href="/scan/bluetooth">Bluetooth</a>
+            <a href="/scan/os_version">OS Version</a>
+            <a href="/scan/port_info">Port Info</a>
+            <a href="/scan/running_apps">Running Apps</a>
+            <a href="/scan/system_info">System Info</a>
+            <a href="/scan/wifi_info">Wi-Fi Info</a>
+        </div>
+    </div>
+    <h1 class="title">{{ hostname }}</h1>
+    <h2 class="title">Endpoint Health</h2>
+    <div class="circle">69</div>
+    <div class="container">
+        <div class="column">
+            <h2 class="underline">Bluetooth</h2>
+            <ul>
+                <h3>Devices Connected:</h3>
+                {% for device in data.bluetooth.device_connected %}
+                    {% for device_name, device_info in device.items() %}
+                        {% if device_info.is_unexpected %}
+                            <li class="unexpected">{{ device_name }}</li>
+                            <form action="/add_bluetooth_device" method="POST" style="display: inline;">
+                                <input type="hidden" name="device_name" value="{{ device_name }}">
+                                <input type="hidden" name="device_address" value="{{ device_info.device_address }}">
+                                <button type="submit" class="button-expected">Expected</button>
+                            </form>
+                            <button onclick="window.location.href='/scan/bluetooth'" class="button-investigate">Investigate</button>
+                        {% else %}
+                            <li>{{ device_name }}</li>
+                        {% endif %}
+                        
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+            <a href="{{ url_for('expected_devices') }}" class="button">View Expected Devices</a>
+        </div>
+        <div class="column">
+            <h2 class="underline">OS Version</h2>
+            <ul>
+                <li><b>Name:</b> {{ data.os_version.name }}</li>
+                <li><b>Version:</b> {{ data.os_version.version }}</li>
+                <li><b>Architecture:</b> {{ data.os_version.arch }}</li>
+            </ul>
+        </div>
+        <div class="column">
+            <h2 class="underline">Ports</h2>
+            <ul>
+                <h3>Open Malicious Ports:</h3>
+            </ul>
+        </div>
+        <div class="column">
+            <h2 class="underline">Running Apps</h2>
+            <ul>
+                <h3>Active App:</h3>
+                {% for app in data.running_apps %}
+                    {% if app.is_active %}
+                        <li>{{ app.bundle_identifier }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="column">
+            <h2 class="underline">System</h2>
+            <ul>
+                <li><b>Host:</b> {{ data.system_info.hostname }}</li>
+                <li><b>Uptime:</b> {{ data.system_info.uptime}}</li>
+                <li><b>Memory:</b> {{ data.system_info.physical_memory }}</li>
+            </ul>
+        </div>
+        <div class="column">
+            <h2 class="underline">Wi-Fi</h2>
+            <ul>
+                <li><b>RSSI:</b> <span class="{{ wifi_colors['RSSI'] }}">{{ data.wifi_info.RSSI }}</span></li>  <!-- Apply color to RSSI -->
+                <li><b>Transmit Rate:</b> <span class="{{ wifi_colors['Transmit_Rate'] }}">{{ data.wifi_info.Transmit_Rate }}</span></li>  <!-- Apply color to Transmit Rate -->
+                <li><b>Noise Level:</b> <span class="{{ wifi_colors['Noise_Level'] }}">{{ data.wifi_info.Noise_Level }}</span></li>  <!-- Apply color to Noise Level -->
+            </ul>
+            <a href="{{ url_for('wifi_thresholds') }}" class="button">Adjust Wi-Fi Standards</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleScanLinks(event) {
+            event.stopPropagation(); // Stop event propagation
+            var dropdown = document.getElementById("scanLinks");
+            if (dropdown.style.display === "block") {
+                dropdown.style.display = "none";
+            } else {
+                dropdown.style.display = "block";
+                document.body.addEventListener("click", function() {
+                    dropdown.style.display = "none";
+                });
+            }
+        }
+    </script>
+</body>
+</html>

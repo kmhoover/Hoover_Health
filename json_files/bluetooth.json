@@ -1,0 +1,68 @@
+{
+  "device_connected" : [
+    {
+      "Keyboard K850" : {
+        "device_address" : "F3:33:5E:8C:98:7E",
+        "device_firmwareVersion" : "MPK04.03_0015",
+        "device_batteryLevelMain" : "100%",
+        "device_vendorID" : "0x046D",
+        "device_minorType" : "Keyboard",
+        "device_productID" : "0xB34D",
+        "device_services" : "0x400000 < BLE >"
+      }
+    },
+    {
+      "M720 Triathlon" : {
+        "device_address" : "CF:4B:91:94:C0:1B",
+        "device_firmwareVersion" : "MPM04.10_0013",
+        "device_batteryLevelMain" : "100%",
+        "device_vendorID" : "0x046D",
+        "device_minorType" : "Mouse",
+        "device_productID" : "0xB015",
+        "device_services" : "0x400000 < BLE >"
+      }
+    }
+  ],
+  "device_not_connected" : [
+    {
+      "AirPods Pro" : {
+        "device_caseVersion" : "61.3.0",
+        "device_productID" : "0x2014",
+        "device_address" : "C4:35:D9:2C:D5:B3",
+        "device_firmwareVersion" : "6F7",
+        "device_serialNumber" : "F250D9WGYQ",
+        "device_minorType" : "Headphones",
+        "device_vendorID" : "0x004C",
+        "device_serialNumberRight" : "GX8JN5F618JP",
+        "device_serialNumberLeft" : "GWHJJ64D18JQ"
+      }
+    },
+    {
+      "Kurtis Hoover’s Beats Studio³" : {
+        "device_address" : "94:F6:D6:F0:71:F2",
+        "device_vendorID" : "0x004C",
+        "device_productID" : "0x2009",
+        "device_serialNumber" : "GD6YN8N8KCD5",
+        "device_minorType" : "Headphones",
+        "device_firmwareVersion" : "2.4.4"
+      }
+    },
+    {
+      "Kurtis’ iphone" : {
+        "device_rssi" : "-52",
+        "device_address" : "04:99:BB:23:48:6C"
+      }
+    }
+  ],
+  "controller_properties" : {
+    "controller_chipset" : "BCM_4387",
+    "controller_discoverable" : "attrib_off",
+    "controller_productID" : "0x4A09",
+    "controller_state" : "attrib_on",
+    "controller_transport" : "PCIe",
+    "controller_vendorID" : "0x004C (Apple)",
+    "controller_firmwareVersion" : "21.5.581.1925",
+    "controller_address" : "AC:C9:06:0F:36:E4",
+    "controller_supportedServices" : "0x392039 < HFP AVRCP A2DP HID Braille LEA AACP GATT SerialPort >"
+  }
+}

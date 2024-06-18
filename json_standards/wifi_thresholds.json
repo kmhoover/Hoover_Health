@@ -1,0 +1,7 @@
+{
+    "threshold": {
+        "RSSI": -43,
+        "Transmit_Rate": 220,
+        "Noise_Level": -91
+    }
+}

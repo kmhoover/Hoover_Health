@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ scan_type }} Scan Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="scan-page">
+    <div class="navbar">
+        <a href="{{ url_for('index') }}" class="button">Home</a>
+    </div>
+    <div class="json">
+        <h1>{{ scan_type }} Scan Results</h1>
+        <pre>{{ data | tojson(indent=2) }}</pre>
+    </div>
+</body>
+</html>

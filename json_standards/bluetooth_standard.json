@@ -1,0 +1,10 @@
+{
+    "expected_devices": [
+        {
+            "Keyboard K850": "F3:33:5E:8C:98:7E"
+        },
+        {
+            "M720 Triathlon": "CF:4B:91:94:C0:1B"
+        }
+    ]
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adjust Wi-Fi Standards</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="scan-page">
+    <div class="navbar">
+        <a href="{{ url_for('index') }}" class="button">Home</a>
+    </div>
+    <div class="json">
+        <h1>Adjust Wi-Fi Standards</h1>
+        <form method="post">
+            {% for key, value in data.threshold.items() %}
+                <label for="{{ key }}">{{ key }}</label>
+                <input type="number" id="{{ key }}" name="{{ key }}" value="{{ value }}" required>
+                <br>
+            {% endfor %}
+            <button type="submit" class="button">Save</button>
+        </form>
+    </div>
+</body>
+</html>

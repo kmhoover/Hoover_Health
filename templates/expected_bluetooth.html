@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expected Bluetooth Devices</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="scan-page">
+    <div class="navbar">
+        <a href="{{ url_for('index') }}" class="button">Home</a>
+    </div>
+    <div class="json">
+        <h1>Expected Bluetooth Devices</h1>
+        <ul>
+            {% for device in data.expected_devices %}
+                {% for device_name, device_address in device.items() %}
+                    <li>
+                        <strong>{{ device_name }}</strong>: {{ device_address }}
+                        <form method="post" style="display:inline;">
+                            <input type="hidden" name="device_name" value="{{ device_name }}">
+                            <button type="submit" class="button-remove">Remove</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
