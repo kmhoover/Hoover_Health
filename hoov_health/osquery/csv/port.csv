@@ -1,0 +1,21 @@
+Port,Protocol,Known Malicious Use
+21,FTP,Often exploited in brute-force and DDoS attacks
+22,SSH,Targeted in brute-force attacks; used for remote control by attackers
+23,Telnet,Unsecured protocol used for backdoor access
+25,SMTP,Used in spam and phishing attacks
+53,DNS,DNS tunneling for data exfiltration
+69,TFTP,Used for file transfers in attacks
+135,RPC,Exploited in Windows DCOM attacks
+137,NetBIOS,Commonly exploited in Windows attacks
+138,NetBIOS,Commonly exploited in Windows attacks
+139,NetBIOS,Commonly exploited in Windows attacks
+1433,MS-SQL,Targeted by SQL injection and brute-force attacks
+1434,MS-SQL,Targeted by SQL injection and brute-force attacks
+1521,Oracle,Exploited in brute-force and SQL injection attacks
+3306,MySQL,Targeted for database attacks
+3389,RDP,Exploited in ransomware attacks and unauthorized remote access
+4444,TCP,Known default port for Metasploit and certain trojans
+5555,Android Debug Bridge,Exploited for unauthorized access to Android devices
+5900,VNC,Exploited in remote access attacks
+8080,HTTP Proxy,Used by proxy-based malware
+8888,Alternate HTTP,Commonly used in proxy and tunneling attacks

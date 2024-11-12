@@ -1,21 +1,12 @@
 import json
-import subprocess
+import csv
+from scan import run_osquery_command
 
 
 # OSQuery command
 commands = {
     "listening_ports": "SELECT pid, port, protocol FROM listening_ports;",
-    "running_processes": "SELECT name, pid, path FROM processes;"
 }
-
-# Run command and convert to json
-def run_osquery_command(query):
-    try:
-        output = subprocess.check_output(['osqueryi', '--json', query])
-        return json.loads(output)
-    except subprocess.CalledProcessError as e:
-        print(f"Error running query: {query}")
-        return []
 
 # Run the command and save results
 results = {}
@@ -23,20 +14,42 @@ for key, query in commands.items():
     results[key] = run_osquery_command(query)
 
 # Save the result to a JSON file
-with open("port_scan.json", "w") as outfile:
+with open("json/port_scan.json", "w") as outfile:
     json.dump(results, outfile, indent=4)
 
+# Load malicious ports from CSV
+def load_malicious_ports(csv_file):
+    malicious_ports = {}
+    with open(csv_file, "r") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            port = row["Port"]
+            malicious_ports[port] = {
+                "Protocol": row["Protocol"],
+                "Known Malicious Use": row["Known Malicious Use"]
+            }
+    return malicious_ports
+
 # Parse results to flag potential issues
-def parse_and_flag(results):
+def parse_and_flag(results, malicious_ports):
     flags = []
-    # Check for SSH (port 22) as an example
-    if any(port["port"] == "135" for port in results["results"]):
-        flags.append("SSH port 22 is open; review if required.")
+    for entry in results["listening_ports"]:
+        port = entry["port"]
+        if port in malicious_ports:
+            flags.append({
+                "Port": port,
+                "Protocol": malicious_ports[port]["Protocol"],
+                "Known Malicious Use": malicious_ports[port]["Known Malicious Use"]
+            })
     return flags
 
-# Load results and flag issues
-with open("results.json", "r") as infile:
+with open("json/port_scan.json", "r") as infile:
     loaded_results = json.load(infile)
-    flagged_issues = parse_and_flag(loaded_results)
 
-print("Potential security flags:", flagged_issues)
+malicious_ports = load_malicious_ports("csv/port.csv")
+
+flagged_issues = parse_and_flag(loaded_results, malicious_ports)
+
+print("Open Ports:")
+for issue in flagged_issues:
+    print(f"Port: {issue['Port']}, Protocol: {issue['Protocol']}, Known Malicious Use: {issue['Known Malicious Use']}")
