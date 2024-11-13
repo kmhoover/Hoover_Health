@@ -12,5 +12,5 @@ for key, query in commands.items():
     results[key] = run_osquery_command(query)
 
 # Save the result to a JSON file
-with open("process_scan.json", "w") as outfile:
+with open("json/process_scan.json", "w") as outfile:
     json.dump(results, outfile, indent=4)
