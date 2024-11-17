@@ -21,6 +21,9 @@ Available Scans:
 - System information
 - Processes
 - Ports
+- Running Processes
+      - *Look into incorporating netstat or lsof to see network communication
+          - I think I can pass pid into netstat to get connections which I can then call OTX api to see if its malicious
 
 Current Health Scores:
 - N/A
