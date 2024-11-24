@@ -4,7 +4,8 @@ import json
 # OSQuery command
 commands = {
     "listening_ports": "SELECT pid, port, protocol FROM listening_ports;",
-    "running_processes": "SELECT name, pid, path FROM processes;"
+    "running_processes": "SELECT name, pid, path FROM processes;",
+    "users": "SELECT username, description, directory FROM users;"
 }
 
 # Run command and convert to json
