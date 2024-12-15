@@ -27,7 +27,7 @@ class _MetricHealthWidgetState extends State<MetricHealthWidget> {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 200),
       // round borders
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -70,7 +70,7 @@ class _MetricHealthWidgetState extends State<MetricHealthWidget> {
                       endAngle: 30,
                       minimum: 0,
                       maximum: 100,
-                      axisLineStyle: AxisLineStyle(
+                      axisLineStyle: const AxisLineStyle(
                         thickness: 0,
                       ),
                       ranges: <GaugeRange>[
@@ -82,7 +82,7 @@ class _MetricHealthWidgetState extends State<MetricHealthWidget> {
                           widget: Container(
                             child: Text(
                               '${widget.score}%',
-                              style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold, color: Colors.white)
+                              style: const TextStyle(fontSize: 25,fontWeight: FontWeight.bold, color: Colors.white)
                             )
                           ),
                           angle: 90,

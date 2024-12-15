@@ -4,7 +4,7 @@ import 'package:hoov_health/backend/state.dart';
 import 'package:provider/provider.dart';
 
 class System extends StatefulWidget {
-  const System({Key? key}) : super(key: key);
+  const System({super.key});
 
   @override
   _SystemState createState() => _SystemState();
@@ -68,36 +68,36 @@ class _SystemState extends State<System> {
           
           return Container(
               color: Colors.black,
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   ElevatedButton(
                     onPressed: fetchSystemInfo,
-                    child: Text('Fetch System Info'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.pink,
                     ),
+                    child: Text('Fetch System Info'),
                   ),
-                  SizedBox(height: 20),
-                  Text(
+                  const SizedBox(height: 20),
+                  const Text(
                     'System Info:',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Expanded(
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: DataTable(
                         columnSpacing: 20,
-                        columns: [
+                        columns: const [
                           DataColumn(label: Text('Property', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))),
                           DataColumn(label: Text('Value', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))),
                         ],
                         rows: systemInfo.entries.map((entry) {
                           return DataRow(cells: [
-                            DataCell(Text(entry.key, style: TextStyle(color: Colors.white))),
-                            DataCell(Text(entry.value.toString(), style: TextStyle(color: Colors.white))),
+                            DataCell(Text(entry.key, style: const TextStyle(color: Colors.white))),
+                            DataCell(Text(entry.value.toString(), style: const TextStyle(color: Colors.white))),
                           ]);
                         }).toList(),
                       ),

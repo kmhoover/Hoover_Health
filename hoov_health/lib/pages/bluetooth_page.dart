@@ -20,7 +20,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text("Bluetooth Devices"),
+        title: const Text("Bluetooth Devices"),
       ),
       body: Consumer<StateModel>(
         builder: (context, stateModel, child) {
@@ -30,7 +30,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
           ControllerProperties? controllerProperties = bluetoothData.controllerProperties!;
 
           return SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
               height: 900,
               child: Column(
                 children: [
@@ -52,18 +52,18 @@ class _BluetoothPageState extends State<BluetoothPage> {
                           leading: Text(devices[index].device_address),
                           title: Text(devices[index].name),
                           subtitle: Text(devices[index].device_minorType),
-                          trailing: Container(
+                          trailing: SizedBox(
                             width: 300,
                             child: Row(
                               children: [
                                 Text(devices[index].device_batteryLevelMain ?? "Battery Unknown"),
-                                Spacer(),
+                                const Spacer(),
                                 Text(devices[index].device_firmwareVersion),
-                                Spacer(),
+                                const Spacer(),
                                 Text(devices[index].device_vendorID),
-                                Spacer(),
+                                const Spacer(),
                                 Text(devices[index].device_productID),
-                                Spacer(),
+                                const Spacer(),
                                 Text(devices[index].device_services ?? "Unknown Device Services"),
                               ],
                             ),
@@ -102,16 +102,16 @@ class _BluetoothPageState extends State<BluetoothPage> {
                     color: Theme.of(context).colorScheme.secondary,
                     child: ListView(
                       children: [
-                        Text("Controller Properties"),
-                        Text("Chipset: " + controllerProperties.controller_chipset),
-                        Text("Discoverable: " + controllerProperties.controller_discoverable),
-                        Text("Product ID: " + controllerProperties.controller_productID),
-                        Text("State: " + controllerProperties.controller_state),
-                        Text("Transport: " + controllerProperties.controller_transport),
-                        Text("Vendor ID: " + controllerProperties.controller_vendorID),
-                        Text("Firmware Version: " + controllerProperties.controller_firmwareVersion),
-                        Text("Address: " + controllerProperties.controller_address),
-                        Text("Supported Services: " + controllerProperties.controller_supportedServices),
+                        const Text("Controller Properties"),
+                        Text("Chipset: ${controllerProperties.controller_chipset}"),
+                        Text("Discoverable: ${controllerProperties.controller_discoverable}"),
+                        Text("Product ID: ${controllerProperties.controller_productID}"),
+                        Text("State: ${controllerProperties.controller_state}"),
+                        Text("Transport: ${controllerProperties.controller_transport}"),
+                        Text("Vendor ID: ${controllerProperties.controller_vendorID}"),
+                        Text("Firmware Version: ${controllerProperties.controller_firmwareVersion}"),
+                        Text("Address: ${controllerProperties.controller_address}"),
+                        Text("Supported Services: ${controllerProperties.controller_supportedServices}"),
                       ],
                     ),
                   ),

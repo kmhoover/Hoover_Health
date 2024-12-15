@@ -9,7 +9,7 @@ import '../scans/wifi.dart'; // Import the WiFi scan function from scans/wifi.da
 import '../scans/system.dart'; // Import the System scan function from scans/system.dart
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  const Dashboard({super.key});
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -125,7 +125,7 @@ class _DashboardState extends State<Dashboard> {
                               ),
                             ),
                             const SizedBox(width: 32),
-                            Expanded(
+                            const Expanded(
                               child: OverallHealthWidget(
                                 score: 69,
                               ),
@@ -160,7 +160,7 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                                 child: Text(
                                   isScanningWifi ? 'Scanning...' : 'WiFi Scan',
-                                  style: TextStyle(color: Colors.white), // Optional: Text color
+                                  style: const TextStyle(color: Colors.white), // Optional: Text color
                                 ),
                               ),
                             ),
@@ -173,7 +173,7 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                                 child: Text(
                                   isScanningSystem ? 'Scanning...' : 'System Scan',
-                                  style: TextStyle(color: Colors.white), // Optional: Text color
+                                  style: const TextStyle(color: Colors.white), // Optional: Text color
                                 ),
                               ),
                             ),
@@ -189,7 +189,7 @@ class _DashboardState extends State<Dashboard> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'WiFi Scan Results:',
                       style: TextStyle(
                         fontSize: 18,
@@ -206,7 +206,7 @@ class _DashboardState extends State<Dashboard> {
                       child: SingleChildScrollView(
                         child: ListView(
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           children: wifiScanResult.entries
                               .map((entry) => ListTile(
                                     title: Text('${entry.key}: ${entry.value}'),
@@ -221,7 +221,7 @@ class _DashboardState extends State<Dashboard> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'System Scan Results:',
                       style: TextStyle(
                         fontSize: 18,
@@ -238,7 +238,7 @@ class _DashboardState extends State<Dashboard> {
                       child: SingleChildScrollView(
                         child: ListView(
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           children: systemScanResult.entries
                               .map((entry) => ListTile(
                                     title: Text('${entry.key}: ${entry.value}'),

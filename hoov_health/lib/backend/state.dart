@@ -27,8 +27,8 @@ class StateModel extends ChangeNotifier {
       type: MetricType.bluetoothHealth,
       title: 'Bluetooth Health',
       icon: Icons.bluetooth,
-      mainColor: Color.fromARGB(255, 123, 212, 234),
-      secondaryColor: Color.fromARGB(255, 123, 212, 234),
+      mainColor: const Color.fromARGB(255, 123, 212, 234),
+      secondaryColor: const Color.fromARGB(255, 123, 212, 234),
       score: 69,
       page_url: '/bluetoothHealth',
     ),
@@ -36,8 +36,8 @@ class StateModel extends ChangeNotifier {
       type: MetricType.wifiHealth,
       title: 'Wifi Health',
       icon: Icons.wifi,
-      mainColor: Color.fromARGB(255, 161, 238, 189),
-      secondaryColor: Color.fromARGB(255, 161, 238, 189),
+      mainColor: const Color.fromARGB(255, 161, 238, 189),
+      secondaryColor: const Color.fromARGB(255, 161, 238, 189),
       score: 69,
       page_url: '/wifiHealth',
     ),
@@ -45,8 +45,8 @@ class StateModel extends ChangeNotifier {
       type: MetricType.systemHealth,
       title: 'System Health',
       icon: Icons.computer,
-      mainColor: Color.fromARGB(255, 255, 208, 150),
-      secondaryColor: Color.fromARGB(255, 255, 208, 150),
+      mainColor: const Color.fromARGB(255, 255, 208, 150),
+      secondaryColor: const Color.fromARGB(255, 255, 208, 150),
       score: 69,
       page_url: '/systemHealth',
     ),
@@ -54,8 +54,8 @@ class StateModel extends ChangeNotifier {
       type: MetricType.otherHealth,
       title: 'Other Health',
       icon: Icons.devices_other,
-      mainColor: Color.fromARGB(255, 190, 173, 250),
-      secondaryColor: Color.fromARGB(255, 190, 173, 250),
+      mainColor: const Color.fromARGB(255, 190, 173, 250),
+      secondaryColor: const Color.fromARGB(255, 190, 173, 250),
       score: 69,
       page_url: '/otherHealth',
     ),
@@ -113,11 +113,7 @@ class StateModel extends ChangeNotifier {
       page_url: metricPageUrls[metric['type']]!,
     )).toList();
 
-    metricsMap = Map.fromIterable(
-      metricsList,
-      key: (metric) => MetricType.values.firstWhere((type) => type == metric.type),
-      value: (metric) => metric,
-    );
+    metricsMap = { for (var metric in metricsList) MetricType.values.firstWhere((type) => type == metric.type) : metric };
   }
 }
 

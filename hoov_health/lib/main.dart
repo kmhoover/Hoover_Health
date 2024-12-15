@@ -18,7 +18,7 @@ void main() async {
   runApp(
     ChangeNotifierProvider(
       create: (context) => StateModel(bluetoothData: bluetoothData),
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -33,25 +33,25 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color(0x1F2128),
-          primary: Color.fromARGB(255, 31, 33, 40),
-          secondary: Color.fromARGB(255, 36, 39, 49),
-          tertiary: Color.fromARGB(255, 255, 255, 255),
+          seedColor: const Color(0x001f2128),
+          primary: const Color.fromARGB(255, 31, 33, 40),
+          secondary: const Color.fromARGB(255, 36, 39, 49),
+          tertiary: const Color.fromARGB(255, 255, 255, 255),
           brightness: Brightness.dark,
         ),
         useMaterial3: true,
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => MyHomePage(title: 'HoovHealth'),
-        '/dashboard': (context) => Dashboard(),
-        '/bluetooth': (context) => BluetoothPage(),
-        '/network': (context) => Network(),
-        '/applications': (context) => Applications(),
-        '/system': (context) => System(),
-        '/systemHealth': (context) => MyHomePage(title: 'System Health'),
-        '/otherHealth': (context) => MyHomePage(title: 'Other Health'),
-        '/overallHealth': (context) => MyHomePage(title: 'Overall Health'),
+        '/': (context) => const MyHomePage(title: 'HoovHealth'),
+        '/dashboard': (context) => const Dashboard(),
+        '/bluetooth': (context) => const BluetoothPage(),
+        '/network': (context) => const Network(),
+        '/applications': (context) => const Applications(),
+        '/system': (context) => const System(),
+        '/systemHealth': (context) => const MyHomePage(title: 'System Health'),
+        '/otherHealth': (context) => const MyHomePage(title: 'Other Health'),
+        '/overallHealth': (context) => const MyHomePage(title: 'Overall Health'),
       },
     );
   }
@@ -77,54 +77,54 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       drawer: Drawer(
-        backgroundColor: Color.fromARGB(255, 140, 3, 3),
+        backgroundColor: const Color.fromARGB(255, 140, 3, 3),
         child: Column(
           children: [
-            DrawerHeader(
+            const DrawerHeader(
               child: Icon(
                 Icons.security,
                 size: 48,
               )
             ),
             ListTile(
-              leading: Icon(
+              leading: const Icon(
                 Icons.wifi,
                 size: 40,
               ),
-              title: Text("N E T W O R K"),
+              title: const Text("N E T W O R K"),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, '/network');
               }
             ),
             ListTile(
-              leading: Icon(
+              leading: const Icon(
                 Icons.bluetooth,
                 size: 40,
               ),
-              title: Text("B L U E T O O T H"),
+              title: const Text("B L U E T O O T H"),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, '/bluetooth');
               }
             ),
             ListTile(
-              leading: Icon(
+              leading: const Icon(
                 Icons.app_shortcut,
                 size: 40,
               ),
-              title: Text("A P P L I C A T I O N S"),
+              title: const Text("A P P L I C A T I O N S"),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, '/applications');
               }
             ),
             ListTile(
-              leading: Icon(
+              leading: const Icon(
                 Icons.system_update_rounded,
                 size: 40,
               ),
-              title: Text("S Y S T E M"),
+              title: const Text("S Y S T E M"),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, '/system');
@@ -134,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
         )
       ),
       body: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           height: 1200,
           child: const Row(
             children: [

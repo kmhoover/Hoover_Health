@@ -20,11 +20,11 @@ class BluetoothDevice {
     required this.name,
     required String device_address,
     required String device_firmwareVersion,
-    String? device_batteryLevelMain = null,
+    String? device_batteryLevelMain,
     required String device_vendorID,
     required String device_minorType,
     required String device_productID,
-    String? device_services = null,
+    String? device_services,
   });
 
   BluetoothDevice.fromJson(Map<String, dynamic> json) {

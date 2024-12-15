@@ -13,7 +13,7 @@ class OverallHealthWidget extends StatelessWidget {
 
     return Container(
       height: 200,
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Theme.of(context).colorScheme.secondary,
@@ -25,7 +25,7 @@ class OverallHealthWidget extends StatelessWidget {
             child: const Text(
               "Total Health Score",
               textAlign: TextAlign.left,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

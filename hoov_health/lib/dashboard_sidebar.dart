@@ -9,7 +9,7 @@ class DashboardSidebar extends StatelessWidget {
     return Container(
       color: Theme.of(context).colorScheme.secondary,
       child: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -19,7 +19,7 @@ class DashboardSidebar extends StatelessWidget {
               width: 180,
               height: 40,
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 41, 46, 61),
+                color: const Color.fromARGB(255, 41, 46, 61),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Row(
@@ -29,7 +29,7 @@ class DashboardSidebar extends StatelessWidget {
                 ],
               )
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Container(
               width: 180,
               height: 40,
@@ -43,7 +43,7 @@ class DashboardSidebar extends StatelessWidget {
                 ],
               )
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -65,7 +65,7 @@ class DashboardSidebar extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Container(
               width: 180,
               height: 40,
@@ -79,7 +79,7 @@ class DashboardSidebar extends StatelessWidget {
                 ],
               )
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Container(
               width: 180,
               height: 40,
