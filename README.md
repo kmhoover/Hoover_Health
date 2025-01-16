@@ -1,24 +1,12 @@
 Lets scan some shit and make a badass dashboard
 
-Next Task:
+Hoover Next Task:
 - Integrate Bluetooth scan
-- Integrate Port scan
 
 Formatting Tasks:
 - Make pages look nice
 - Don't populate pages before first scan
 - Have home page health scores updated based on side pages
-
-Available Scans:
-- Bluetooth
-- Wifi
-- OS information
-- System information
-- Processes
-- Ports
-- Running Processes
-      - *Look into incorporating netstat or lsof to see network communication
-          - I think I can pass pid into netstat to get connections which I can then call OTX api to see if its malicious
 
 Health Scores
 - Available:
@@ -30,8 +18,10 @@ Health Scores
     - Application
           - Contains verified bundle identifier
           - If new, make user confirm they installed/okay with it
+          - Can I have user end process by clicking a button?? 
       - Bluetooth
           - List of safe/expected devices
+          - Can I have user disconnect bluetooth?
 
 Scans I want
 - Process run on startup
@@ -42,6 +32,7 @@ Crazy Scans
 - IP lookups
 - Email lookups
 - Darkweb?????
+- nmap??
 
 **Future Ideas**
 - _Security checklist_
@@ -60,3 +51,5 @@ Crazy Scans
   - New Process Alerts
 - _Threat Intelligence_
     - Cross reference https://otx.alienvault.com/api
+    - Look into incorporating netstat or lsof to see network communication
+          - I think I can pass pid into netstat to get connections which I can then call OTX api to see if its malicious
