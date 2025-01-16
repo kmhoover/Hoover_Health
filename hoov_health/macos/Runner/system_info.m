@@ -66,18 +66,6 @@ NSDictionary* getSystemInfo(void) {
             }
             if (productVersion) {
                 result[@"version"] = productVersion;
-
-                // Break out version parts
-                NSArray *versionComponents = [productVersion componentsSeparatedByString:@"."];
-                if (versionComponents.count > 0) {
-                    result[@"major"] = @([versionComponents[0] integerValue]);
-                }
-                if (versionComponents.count > 1) {
-                    result[@"minor"] = @([versionComponents[1] integerValue]);
-                }
-                if (versionComponents.count > 2) {
-                    result[@"patch"] = @([versionComponents[2] integerValue]);
-                }
             }
             if (productBuildVersion) {
                 result[@"build"] = productBuildVersion;

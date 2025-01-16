@@ -15,6 +15,19 @@ class _SystemState extends State<System> {
 
   Map<String, dynamic> systemInfo = {};
 
+  final Map<String, String> descriptions = {
+    'Build': 'The OS build version of the system.',
+    'Processor_Type': 'The type of processor the system is using.',
+    'Arch': 'The system architecture (e.g., x86, ARM).',
+    'Hostname': 'The network name assigned to the system.',
+    'Platform_Like': 'The general category of the OS (e.g., UNIX-like).',
+    'Platform': 'The specific platform or distribution the system is running.',
+    'Name': 'The official name of the system or OS.',
+    'Physical_Memory': 'Total available physical memory (RAM) in MB.',
+    'Version': 'The version number of the OS.',
+    'Uptime': 'The time the system has been running since last boot.',
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +38,6 @@ class _SystemState extends State<System> {
       body: Consumer<StateModel>(
         builder: (context, stateModel, child) {
           var db = stateModel.databaseHelper;
-
 
           Future<void> fetchSystemInfo() async {
             try {
@@ -52,7 +64,7 @@ class _SystemState extends State<System> {
               print("Failed to get System info: '${e.message}'.");
             }
           }
-          
+
           Future<void> fetchLatestSystemScan() async {
             final result = await db.getLatestSystemScan();
             setState(() {
@@ -63,49 +75,106 @@ class _SystemState extends State<System> {
           if (systemInfo.isEmpty) {
             fetchLatestSystemScan();
           }
-          
+
           return Container(
-              color: Colors.black,
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  ElevatedButton(
-                    onPressed: fetchSystemInfo,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.pink,
-                    ),
-                    child: Text('Fetch System Info'),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'System Info:',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        columnSpacing: 20,
-                        columns: const [
-                          DataColumn(label: Text('Property', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))),
-                          DataColumn(label: Text('Value', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))),
-                        ],
-                        rows: systemInfo.entries.map((entry) {
-                          return DataRow(cells: [
-                            DataCell(Text(entry.key, style: const TextStyle(color: Colors.white))),
-                            DataCell(Text(entry.value.toString(), style: const TextStyle(color: Colors.white))),
-                          ]);
-                        }).toList(),
-                      ),
+            color: Colors.black,
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                // Large Laptop Icon as Scan Button
+                Center(
+                  child: GestureDetector(
+                    onTap: fetchSystemInfo,
+                    child: Column(
+                      children: [
+                        const Icon(Icons.laptop, size: 100, color: Colors.pink),
+                        const SizedBox(height: 10),
+                        const Text(
+                          'Scan System Info',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            );
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'System Info:',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 4,
+                      mainAxisSpacing: 20,
+                      crossAxisSpacing: 20,
+                    ),
+                    itemCount: systemInfo.length,
+                    itemBuilder: (context, index) {
+                      var entry = systemInfo.entries.elementAt(index);
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueGrey[800],
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          onPressed: () {
+                            _showDescriptionDialog(context, entry.key, entry.value.toString());
+                          },
+                          child: Text(
+                            '${entry.key}: ${entry.value}',
+                            style: const TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
         },
       ),
+    );
+  }
+
+  void _showDescriptionDialog(BuildContext context, String key, String value) {
+    // Normalize the key to lowercase
+    String normalizedKey = key.toLowerCase();  // Convert key to lowercase
+    
+    // Find the corresponding description by comparing normalized keys
+    String description = descriptions.entries
+        .firstWhere(
+          (entry) => entry.key.toLowerCase() == normalizedKey, 
+          orElse: () => MapEntry('', 'No description available.')
+        )
+        .value;
+    
+    print('key $key, normalized key $normalizedKey, value $value');
+    print('Description for $key: $description');  // Log the description
+    
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(key),
+          content: Text('$value\n\n$description'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

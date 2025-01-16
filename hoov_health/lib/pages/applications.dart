@@ -21,7 +21,6 @@ class _ApplicationsState extends State<Applications> {
       setState(() {
         var processesList = result?['processes'] as List<dynamic> ?? [];
         appInfo = processesList.map<ProcessInfo>((processJson) {
-          // Convert each item to a Map<String, dynamic> safely.
           var processMap = Map<String, dynamic>.from(processJson as Map);
           return ProcessInfo.fromJson(processMap);
         }).toList();
@@ -44,12 +43,27 @@ class _ApplicationsState extends State<Applications> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            ElevatedButton(
-              onPressed: fetchAppInfo,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+            // Search Icon centered in the middle without the blue bar
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: fetchAppInfo,
+                    icon: const Icon(Icons.search, size: 70, color: Colors.white),
+                    padding: EdgeInsets.zero, // No padding to make it centered
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Start Scan',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
-              child: Text('Fetch App Info'),
             ),
             const SizedBox(height: 20),
             const Text(
@@ -60,33 +74,60 @@ class _ApplicationsState extends State<Applications> {
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    columnSpacing: 20,
-                    columns: const [
-                      DataColumn(label: Text('Name', style: TextStyle(color: Colors.white))),
-                      DataColumn(label: Text('PID', style: TextStyle(color: Colors.white))),
-                      DataColumn(label: Text('CPU Usage', style: TextStyle(color: Colors.white))),
-                      DataColumn(label: Text('Active', style: TextStyle(color: Colors.white))),
-                      DataColumn(label: Text('Bundle Identifier', style: TextStyle(color: Colors.white))),
-                      DataColumn(label: Text('Launch Date', style: TextStyle(color: Colors.white))),
-                      DataColumn(label: Text('Icon Path', style: TextStyle(color: Colors.white))),
-                      DataColumn(label: Text('Executable Path', style: TextStyle(color: Colors.white))),
-                    ],
-                    rows: appInfo.map((entry) {
-                      return DataRow(cells: [
-                        DataCell(Text(entry.localizedName, style: const TextStyle(color: Colors.white))),
-                        DataCell(Text(entry.pid.toString(), style: const TextStyle(color: Colors.white))),
-                        DataCell(Text(entry.cpuUsage.toString(), style: const TextStyle(color: Colors.white))),
-                        DataCell(Text(entry.isActive.toString(), style: const TextStyle(color: Colors.white))),
-                        DataCell(Text(entry.bundleIdentifier, style: const TextStyle(color: Colors.white))),
-                        DataCell(Text(entry.launchDate, style: const TextStyle(color: Colors.white))),
-                        DataCell(Text(entry.iconPath, style: const TextStyle(color: Colors.white))),
-                        DataCell(Text(entry.executablePath, style: const TextStyle(color: Colors.white))),
-                      ]);
-                    }).toList(),
+                child: GridView.builder(
+                  shrinkWrap: true, // Ensure GridView doesn't take full available space
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 4,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
                   ),
+                  itemCount: appInfo.length,
+                  itemBuilder: (context, index) {
+                    var entry = appInfo[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text(entry.localizedName),
+                              contentPadding: const EdgeInsets.all(10.0),
+                              content: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('PID: ${entry.pid}'),
+                                    Text('CPU Usage: ${entry.cpuUsage}'),
+                                    Text('Active: ${entry.isActive}'),
+                                    Text('Bundle Identifier: ${entry.bundleIdentifier}'),
+                                    Text('Launch Date: ${entry.launchDate}'),
+                                    Text('Icon Path: ${entry.iconPath}'),
+                                    Text('Executable Path: ${entry.executablePath}'),
+                                  ],
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('Close'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepPurple,
+                        ),
+                        child: Text(
+                          entry.localizedName,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

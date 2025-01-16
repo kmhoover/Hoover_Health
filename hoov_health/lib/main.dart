@@ -121,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ListTile(
               leading: const Icon(
-                Icons.system_update_rounded,
+                Icons.laptop,
                 size: 40,
               ),
               title: const Text("S Y S T E M"),
