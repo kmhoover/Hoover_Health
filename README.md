@@ -1,19 +1,5 @@
 Lets scan some shit and make a badass dashboard
 
-Current OSQuery Scans:
-commands = {
-    "listening_ports": "SELECT pid, port, protocol FROM listening_ports;",
-    "running_processes": "SELECT name, pid, path FROM processes;"
-}
-
-Back home work:
-- Create list of safe users
-    - cross reference when scanning
-- Ports and Processes
-    - cross reference list of potential malicious ports and list the pid/process name that is using it
-    - allow uuser to create list of expected pids
-    - check out current implementation in /osquery
-
 Available Scans:
 - Bluetooth
 - Wifi
@@ -25,12 +11,23 @@ Available Scans:
       - *Look into incorporating netstat or lsof to see network communication
           - I think I can pass pid into netstat to get connections which I can then call OTX api to see if its malicious
 
-Current Health Scores:
-- N/A
+Health Scores
+- Available:
+    - Wifi
+- Still need:
+    - System
+          - Is device fully updated?
+          - Long uptime
+    - Application
+          - Contains verified bundle identifier
+          - If new, make user confirm they installed/okay with it
+      - Bluetooth
+          - List of safe/expected devices
 
 Scans I want
 - Process run on startup
 - User sessions
+- Ports
 
 Crazy Scans
 - IP lookups
@@ -52,12 +49,5 @@ Crazy Scans
       - Analyze usage trenst (CPU usage by processes, network usage)
       - Flag abnormal spike
   - New Process Alerts
-- _User Privacy Protection_
-    - Network Privacy Check
-        - Scan Wi-Fi for vulnerabilities (open networks/weak encryption)
-    - Bluetooth Device Monitoring
-        - Alerts if new Bluetooth device aattempts to connect
-    - File Privacy Check
-        - Alert if unexpected file access patterns
 - _Threat Intelligence_
     - Cross reference https://otx.alienvault.com/api
