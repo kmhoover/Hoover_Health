@@ -1,4 +1,4 @@
-int calculateHealthScore(Map<String, dynamic> wifiInfo) {
+int networkHealthScore(Map<String, dynamic> wifiInfo) {
   const weightRSSI = 0.4; // Strong signal
   const weightNoise = 0.3; // Low noise
   const weightSecurity = 0.3; // Strong encryption

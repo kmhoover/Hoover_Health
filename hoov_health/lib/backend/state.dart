@@ -13,57 +13,65 @@ class StateModel extends ChangeNotifier {
   BluetoothData? bluetoothData;
   OperatingSystemData? osVersion;
 
+  int _wifiHealthScore = -1;
+
+  int get wifiHealthScore => _wifiHealthScore;
+  void updateWifiHealthScore(int score) {
+    _wifiHealthScore = score;
+    print('State health Score: ${_wifiHealthScore}');
+    notifyListeners(); // This will notify the consumers to update
+  }
   
-  Metric overallHealth = Metric(
-    type: MetricType.overallHealth,
-    title: 'Overall Health',
-    icon: Icons.favorite,
-    mainColor: Colors.red,
-    secondaryColor: Colors.red[200]!,
-    score: 69,
-    page_url: '/overallHealth',
-  );
 
-  Map<MetricType, Metric> metricsMap = {
-    MetricType.bluetoothHealth: Metric(
-      type: MetricType.bluetoothHealth,
-      title: 'Bluetooth Health',
-      icon: Icons.bluetooth,
-      mainColor: const Color.fromARGB(255, 123, 212, 234),
-      secondaryColor: const Color.fromARGB(255, 123, 212, 234),
-      score: 69,
-      page_url: '/bluetoothHealth',
-    ),
-    MetricType.wifiHealth: Metric(
-      type: MetricType.wifiHealth,
-      title: 'Wifi Health',
-      icon: Icons.wifi,
-      mainColor: const Color.fromARGB(255, 161, 238, 189),
-      secondaryColor: const Color.fromARGB(255, 161, 238, 189),
-      score: 69,
-      page_url: '/wifiHealth',
-    ),
-    MetricType.systemHealth: Metric(
-      type: MetricType.systemHealth,
-      title: 'System Health',
-      icon: Icons.computer,
-      mainColor: const Color.fromARGB(255, 255, 208, 150),
-      secondaryColor: const Color.fromARGB(255, 255, 208, 150),
-      score: 69,
-      page_url: '/systemHealth',
-    ),
-    MetricType.otherHealth: Metric(
-      type: MetricType.otherHealth,
-      title: 'Other Health',
-      icon: Icons.devices_other,
-      mainColor: const Color.fromARGB(255, 190, 173, 250),
-      secondaryColor: const Color.fromARGB(255, 190, 173, 250),
-      score: 69,
-      page_url: '/otherHealth',
-    ),
-  };
+  late Map<MetricType, Metric> metricsMap;
 
+  StateModel({
+    required this.bluetoothData,
+  }) {
+    initializeMetrics();
+  }
 
+  // This method initializes metricsMap after the instance is created
+  void initializeMetrics() {
+    metricsMap = {
+      MetricType.bluetoothHealth: Metric(
+        type: MetricType.bluetoothHealth,
+        title: 'Bluetooth Health',
+        icon: Icons.bluetooth,
+        mainColor: const Color.fromARGB(255, 123, 212, 234),
+        secondaryColor: const Color.fromARGB(255, 123, 212, 234),
+        score: 69,
+        page_url: '/bluetoothHealth',
+      ),
+      MetricType.wifiHealth: Metric(
+        type: MetricType.wifiHealth,
+        title: 'Wifi Health',
+        icon: Icons.wifi,
+        mainColor: const Color.fromARGB(255, 161, 238, 189),
+        secondaryColor: const Color.fromARGB(255, 161, 238, 189),
+        score: _wifiHealthScore,
+        page_url: '/wifiHealth',
+      ),
+      MetricType.systemHealth: Metric(
+        type: MetricType.systemHealth,
+        title: 'System Health',
+        icon: Icons.computer,
+        mainColor: const Color.fromARGB(255, 255, 208, 150),
+        secondaryColor: const Color.fromARGB(255, 255, 208, 150),
+        score: 69,
+        page_url: '/systemHealth',
+      ),
+      MetricType.otherHealth: Metric(
+        type: MetricType.otherHealth,
+        title: 'Other Health',
+        icon: Icons.devices_other,
+        mainColor: const Color.fromARGB(255, 190, 173, 250),
+        secondaryColor: const Color.fromARGB(255, 190, 173, 250),
+        score: 69,
+        page_url: '/otherHealth',
+      ),
+    };
+  }
 
   // Add a getter for healthScore
   double get healthScore {
@@ -78,10 +86,7 @@ class StateModel extends ChangeNotifier {
     return count == 0 ? 0 : totalScore / count;
   }
 
-  StateModel({
-    required this.bluetoothData,
-  });
-
+  // Convert to JSON for saving
   Map<String, dynamic> toJson() {
     return {
       'metrics': metricsMap.values.map((metric) => {
@@ -94,6 +99,7 @@ class StateModel extends ChangeNotifier {
     };
   }
 
+  // Create the StateModel from JSON
   StateModel.fromJson(Map<String, dynamic> json) {
     var metricsList = (json['metrics'] as List).map<Metric>((metric) {
       final type = MetricType.values.firstWhere(

@@ -14,13 +14,13 @@ class Network extends StatefulWidget {
 class _NetworkState extends State<Network> {
   static const platform = MethodChannel('com.example.wifi_info');
   Map<String, dynamic> wifiInfo = {};
-  int healthScore = 0; // Variable to store the health score
+  int healthScore = 0;
 
   @override
   void initState() {
     super.initState();
   }
-
+  //Give explanations of scan results
   String getExplanation(String key, dynamic value) {
     switch (key) {
       case 'Channel_Band':
@@ -70,9 +70,10 @@ class _NetworkState extends State<Network> {
 
               setState(() {
                 wifiInfo = val;
-                // Calculate health score based on the wifiInfo and store it
-                healthScore = calculateHealthScore(val);
+                healthScore = networkHealthScore(val);
               });
+
+              stateModel.updateWifiHealthScore(healthScore);
             } on PlatformException catch (e) {
               print("Failed to get Wi-Fi info: '${e.message}'.");
             }
@@ -93,13 +94,14 @@ class _NetworkState extends State<Network> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '$healthScore', // Display the health score here
+                      '$healthScore', // Display the health score
                       style: const TextStyle(
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
                         color: Colors.lightGreen,
                       ),
                     ),
+                    //Display how healthscore is calculated
                     IconButton(
                       icon: const Icon(Icons.info_outline, color: Colors.white),
                       onPressed: () {
