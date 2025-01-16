@@ -13,6 +13,7 @@ class StateModel extends ChangeNotifier {
   BluetoothData? bluetoothData;
   OperatingSystemData? osVersion;
 
+  
   Metric overallHealth = Metric(
     type: MetricType.overallHealth,
     title: 'Overall Health',
@@ -22,6 +23,7 @@ class StateModel extends ChangeNotifier {
     score: 69,
     page_url: '/overallHealth',
   );
+
   Map<MetricType, Metric> metricsMap = {
     MetricType.bluetoothHealth: Metric(
       type: MetricType.bluetoothHealth,
@@ -61,30 +63,20 @@ class StateModel extends ChangeNotifier {
     ),
   };
 
-  // void updateMetric(Metric metric) {
-  //   metricsMap[metric.type] = metric;
-  //   notifyListeners();
 
-  //   var filename = 'unknown.json';
-  //   switch (metric.type) {
-  //     case MetricType.bluetoothHealth:
-  //       filename = 'bluetooth.json';
-  //       break;
-  //     case MetricType.wifiHealth:
-  //       filename = 'wifi_info.json';
-  //       break;
-  //     case MetricType.systemHealth:
-  //       filename = 'system_info.json';
-  //       break;
-  //     case MetricType.otherHealth:
-  //       filename = 'running_apps.json';
-  //       break;
-  //     default:
-  //       break;
-  //   }
 
-  //   _saveMetricAsset(json.encode(toJson()), filename);
-  // }
+  // Add a getter for healthScore
+  double get healthScore {
+    double totalScore = 0;
+    int count = 0;
+
+    metricsMap.forEach((key, metric) {
+      totalScore += metric.score;
+      count++;
+    });
+
+    return count == 0 ? 0 : totalScore / count;
+  }
 
   StateModel({
     required this.bluetoothData,
@@ -103,43 +95,47 @@ class StateModel extends ChangeNotifier {
   }
 
   StateModel.fromJson(Map<String, dynamic> json) {
-    var metricsList = (json['metrics'] as List).map<Metric>((metric) => Metric(
-      type: metric['type'],
-      title: metric['title'],
-      icon: metricIcons[metric['type']]!,
-      mainColor: metric['mainColor'],
-      secondaryColor: metric['secondaryColor'],
-      score: metric['score'],
-      page_url: metricPageUrls[metric['type']]!,
-    )).toList();
+    var metricsList = (json['metrics'] as List).map<Metric>((metric) {
+      final type = MetricType.values.firstWhere(
+          (type) => type.toString() == 'MetricType.${metric['type']}',
+          orElse: () => MetricType.otherHealth);  // Fallback type
+      return Metric(
+        type: type,
+        title: metric['title'],
+        icon: metricIcons[type]!,
+        mainColor: Color(int.parse(metric['mainColor'])),
+        secondaryColor: Color(int.parse(metric['secondaryColor'])),
+        score: metric['score'],
+        page_url: metricPageUrls[type]!,
+      );
+    }).toList();
 
-    metricsMap = { for (var metric in metricsList) MetricType.values.firstWhere((type) => type == metric.type) : metric };
+    metricsMap = { for (var metric in metricsList) metric.type : metric };
   }
 }
 
 Future<List<String>> _loadMetricAssets() async {
   final directory = await getApplicationDocumentsDirectory();
-  final bluetoothFile = File('${directory.path}/bluetooth.json');
-  final osVersionFile = File('${directory.path}/os_version.json');
-  final portInfoFile = File('${directory.path}/port_info.json');
-  final runningAppsFile = File('${directory.path}/running_apps.json');
-  final systemInfoFile = File('${directory.path}/systemInfoFile.json');
-  final wifiInfoFile = File('${directory.path}/wifi_info.json');
+  final List<File> files = [
+    File('${directory.path}/bluetooth.json'),
+    File('${directory.path}/os_version.json'),
+    File('${directory.path}/port_info.json'),
+    File('${directory.path}/running_apps.json'),
+    File('${directory.path}/systemInfoFile.json'),
+    File('${directory.path}/wifi_info.json')
+  ];
 
-  if (await bluetoothFile.exists() &&
-      await osVersionFile.exists() &&
-      await portInfoFile.exists() &&
-      await runningAppsFile.exists() &&
-      await systemInfoFile.exists() &&
-      await wifiInfoFile.exists()) {
-    return [
-      await bluetoothFile.readAsString(),
-      await osVersionFile.readAsString(),
-      await portInfoFile.readAsString(),
-      await runningAppsFile.readAsString(),
-      await systemInfoFile.readAsString(),
-      await wifiInfoFile.readAsString(),
-    ];
+  for (var file in files) {
+    if (await file.exists()) {
+      return [
+        await file.readAsString(),
+        await file.readAsString(),
+        await file.readAsString(),
+        await file.readAsString(),
+        await file.readAsString(),
+        await file.readAsString(),
+      ];
+    }
   }
 
   return await Future.wait([
@@ -151,19 +147,6 @@ Future<List<String>> _loadMetricAssets() async {
     rootBundle.loadString('assets/wifi_info.json'),
   ]);
 }
-
-// Future<File> _saveMetricAsset(String jsonString, String filename) async {
-//   // save the string into the recipe_list.json file
-//   final directory = await getApplicationDocumentsDirectory();
-//   final file = File('${directory.path}/$filename');
-
-//   // create file if it doesn't exist
-//   if (!await file.exists()) {
-//     await file.create(recursive: true);
-//   }
-
-//   return file.writeAsString(jsonString);
-// }
 
 Future<List<Map<String, dynamic>>> loadMetricJsons() async {
   final jsonStringList = await _loadMetricAssets();

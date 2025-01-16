@@ -44,8 +44,6 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE SystemScan (
         id INTEGER PRIMARY KEY,
-        minor INT,
-        major INT,
         build INT,
         processor_type TEXT,
         arch TEXT,
@@ -91,8 +89,6 @@ class DatabaseHelper {
   }
 
   Future insertSystemScan({
-    required int minor,
-    required int major,
     required int build,
     required String processor_type,
     required String arch,
@@ -108,8 +104,8 @@ class DatabaseHelper {
     int currentTimestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000; // Unix timestamp in seconds
     await db.transaction((txn) async {
       int id = await txn.rawInsert(
-        'INSERT INTO SystemScan(minor, major, build, processor_type, arch, hostname, platform_like, platform, name, physical_memory, version, uptime, timestamp) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [minor, major, build, processor_type, arch, hostname, platform_like, platform, name, physical_memory, version, uptime, currentTimestamp],
+        'INSERT INTO SystemScan(build, processor_type, arch, hostname, platform_like, platform, name, physical_memory, version, uptime, timestamp) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [build, processor_type, arch, hostname, platform_like, platform, name, physical_memory, version, uptime, currentTimestamp],
       );
       print('inserted: $id');
     });

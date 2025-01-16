@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hoov_health/backend/state.dart';
 import 'package:provider/provider.dart';
+import 'package:hoov_health/scores/health_score.dart';
 
 class Network extends StatefulWidget {
   const Network({super.key});
@@ -13,35 +14,33 @@ class Network extends StatefulWidget {
 class _NetworkState extends State<Network> {
   static const platform = MethodChannel('com.example.wifi_info');
   Map<String, dynamic> wifiInfo = {};
-  TextEditingController queryController = TextEditingController();
+  int healthScore = 0; // Variable to store the health score
 
   @override
   void initState() {
     super.initState();
-    // Set the default query
-    queryController.text = 'SELECT * FROM NetworkScan';
   }
 
   String getExplanation(String key, dynamic value) {
-  switch (key) {
-    case 'Channel_Band':
-      return 'The channel band (${value.toString()}) refers to the frequency band used for Wi-Fi transmission. Higher bands, like 5 GHz, offer faster speeds but shorter range.';
-    case 'Channel_Width':
-      return 'Channel width (${value.toString()} MHz) affects Wi-Fi speed and interference. Wider channels provide higher speeds but may suffer more interference.';
-    case 'Channel':
-      return 'The channel (${value.toString()}) indicates the specific frequency used for communication. Avoid crowded channels to minimize interference.';
-    case 'Security':
-      return 'Security (${value.toString()}) indicates the encryption used for your network. Stronger encryption like WPA3 enhances network protection.';
-    case 'Transmit_Rate':
-      return 'The transmit rate (${value.toString()} Mbps) is the speed at which data is sent from your device to the router.';
-    case 'Noise_Level':
-      return 'The noise level (${value.toString()} dBm) reflects signal interference. Lower values indicate better connection quality.';
-    case 'RSSI':
-      return 'The RSSI (${value.toString()} dBm) represents signal strength. A higher (closer to 0) RSSI means a stronger signal.';
-    default:
-      return 'No additional information available for this parameter.';
+    switch (key) {
+      case 'Channel_Band':
+        return 'The channel band (${value.toString()}) refers to the frequency band used for Wi-Fi transmission. Higher bands, like 5 GHz, offer faster speeds but shorter range.';
+      case 'Channel_Width':
+        return 'Channel width (${value.toString()} MHz) affects Wi-Fi speed and interference. Wider channels provide higher speeds but may suffer more interference.';
+      case 'Channel':
+        return 'The channel (${value.toString()}) indicates the specific frequency used for communication. Avoid crowded channels to minimize interference.';
+      case 'Security':
+        return 'Security (${value.toString()}) indicates the encryption used for your network. Stronger encryption like WPA3 enhances network protection.';
+      case 'Transmit_Rate':
+        return 'The transmit rate (${value.toString()} Mbps) is the speed at which data is sent from your device to the router.';
+      case 'Noise_Level':
+        return 'The noise level (${value.toString()} dBm) reflects signal interference. Lower values indicate better connection quality.';
+      case 'RSSI':
+        return 'The RSSI (${value.toString()} dBm) represents signal strength. A higher (closer to 0) RSSI means a stronger signal.';
+      default:
+        return 'No additional information available for this parameter.';
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -71,22 +70,12 @@ class _NetworkState extends State<Network> {
 
               setState(() {
                 wifiInfo = val;
+                // Calculate health score based on the wifiInfo and store it
+                healthScore = calculateHealthScore(val);
               });
             } on PlatformException catch (e) {
               print("Failed to get Wi-Fi info: '${e.message}'.");
             }
-          }
-
-          Future<void> fetchLatestNetworkScan(String query) async {
-            final result = await db.getLatestNetworkScan(query);
-            setState(() {
-              wifiInfo = result;
-            });
-            print(result);
-          }
-
-          if (wifiInfo.isEmpty) {
-            fetchLatestNetworkScan(queryController.text); // Fetch initially with default query
           }
 
           return Container(
@@ -95,34 +84,60 @@ class _NetworkState extends State<Network> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
+                const Text(
+                  'Health Score:',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
+                ),
+                const SizedBox(height: 10),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Wi-Fi Info:',
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
-                    ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: TextField(
-                        controller: queryController,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: InputDecoration(
-                          hintText: 'Enter SQL query',
-                          hintStyle: const TextStyle(color: Colors.grey),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey[800],
-                        ),
-                        onSubmitted: (query) {
-                          fetchLatestNetworkScan(query); // Update query on submission
-                        },
+                    Text(
+                      '$healthScore', // Display the health score here
+                      style: const TextStyle(
+                        fontSize: 50,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.lightGreen,
                       ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.info_outline, color: Colors.white),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              backgroundColor: Colors.grey[900],
+                              title: const Text(
+                                'Health Score Calculation',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              content: const Text(
+                                'The health score is calculated based on the following criteria:\n\n'
+                                '1. RSSI: Stronger signals (closer to 0) improve the score.\n'
+                                '2. Noise Level: Less interference improves the score.\n'
+                                '3. Security: Stronger encryption, like WPA3, gives the highest score.',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text(
+                                    'Close',
+                                    style: TextStyle(color: Colors.lightBlue),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
                 Center(
                   child: ElevatedButton(
                     onPressed: fetchWifiInfo,
@@ -131,7 +146,7 @@ class _NetworkState extends State<Network> {
                       padding: const EdgeInsets.all(40),
                       backgroundColor: Colors.lightBlue,
                     ),
-                    child: Icon(Icons.wifi, color: Colors.white),
+                    child: const Icon(Icons.wifi, color: Colors.white),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -188,11 +203,11 @@ class _NetworkState extends State<Network> {
                             children: [
                               Text(
                                 entry.key,
-                                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),
+                                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),
                               ),
                               Text(
                                 entry.value.toString(),
-                                style: TextStyle(color: Colors.white, fontSize: 12),
+                                style: const TextStyle(color: Colors.white, fontSize: 12),
                               ),
                             ],
                           ),

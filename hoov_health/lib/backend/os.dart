@@ -1,7 +1,5 @@
 class OperatingSystemData {
   final String name;
-  final int major;
-  final int minor;
   final String version;
   final String build;
   final String platform;
@@ -10,8 +8,6 @@ class OperatingSystemData {
 
   OperatingSystemData({
     required this.name,
-    required this.major,
-    required this.minor,
     required this.version,
     required this.build,
     required this.platform,
@@ -22,8 +18,6 @@ class OperatingSystemData {
   factory OperatingSystemData.fromJson(Map<String, dynamic> json) {
     return OperatingSystemData(
       name: json['name'],
-      major: json['major'],
-      minor: json['minor'],
       version: json['version'],
       build: json['build'],
       platform: json['platform'],

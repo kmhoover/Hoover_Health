@@ -33,8 +33,6 @@ class _SystemState extends State<System> {
               final val = result?.cast<String, dynamic>() ?? {};
 
               await db.insertSystemScan(
-                minor: val['Minor'] ?? -1,
-                major: val['Major'] ?? -1,
                 build: val['Build'] ?? -1,
                 processor_type: val['Processor_Type'] ?? 'Unknown',
                 arch: val['Arch'] ?? 'Unknown',
