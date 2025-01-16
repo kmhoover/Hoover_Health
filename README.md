@@ -1,5 +1,9 @@
 Lets scan some shit and make a badass dashboard
 
+Next Task:
+- Integrate Bluetooth scan
+- Integrate Port scan
+
 Formatting Tasks:
 - Make pages look nice
 - Don't populate pages before first scan
