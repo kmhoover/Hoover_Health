@@ -72,63 +72,60 @@ class _ApplicationsState extends State<Applications> {
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: GridView.builder(
-                  shrinkWrap: true, // Ensure GridView doesn't take full available space
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 4,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 20,
-                  ),
-                  itemCount: appInfo.length,
-                  itemBuilder: (context, index) {
-                    var entry = appInfo[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text(entry.localizedName),
-                              contentPadding: const EdgeInsets.all(10.0),
-                              content: SingleChildScrollView(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('PID: ${entry.pid}'),
-                                    Text('CPU Usage: ${entry.cpuUsage}'),
-                                    Text('Active: ${entry.isActive}'),
-                                    Text('Bundle Identifier: ${entry.bundleIdentifier}'),
-                                    Text('Launch Date: ${entry.launchDate}'),
-                                    Text('Icon Path: ${entry.iconPath}'),
-                                    Text('Executable Path: ${entry.executablePath}'),
-                                  ],
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text('Close'),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.deepPurple,
-                        ),
-                        child: Text(
-                          entry.localizedName,
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    );
-                  },
+              child: GridView.builder(
+                shrinkWrap: true, // Ensure GridView doesn't take full available space
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 4,
+                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 20,
                 ),
+                itemCount: appInfo.length,
+                itemBuilder: (context, index) {
+                  var entry = appInfo[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(entry.localizedName),
+                            contentPadding: const EdgeInsets.all(10.0),
+                            content: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('PID: ${entry.pid}'),
+                                  Text('CPU Usage: ${entry.cpuUsage}'),
+                                  Text('Active: ${entry.isActive}'),
+                                  Text('Bundle Identifier: ${entry.bundleIdentifier}'),
+                                  Text('Launch Date: ${entry.launchDate}'),
+                                  Text('Icon Path: ${entry.iconPath}'),
+                                  Text('Executable Path: ${entry.executablePath}'),
+                                ],
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('Close'),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.deepPurple,
+                      ),
+                      child: Text(
+                        entry.localizedName,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ],

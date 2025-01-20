@@ -13,7 +13,7 @@ class DashboardSidebar extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          // The sidebar elements should be Dashboard (selected), Bluetooth Health, WiFi Health, System Health, OS Health all with icons
+          // The sidebar elements should be Dashboard (selected), WiFi Health, System Health, OS Health all with icons
           children: [
             Container(
               width: 180,
@@ -26,20 +26,6 @@ class DashboardSidebar extends StatelessWidget {
                 children: [
                   Icon(Icons.dashboard, color: Colors.white),
                   Expanded(child: Text('Dashboard', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: Colors.white))),
-                ],
-              )
-            ),
-            const SizedBox(height: 8),
-            Container(
-              width: 180,
-              height: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Row(
-                children: [
-                  Icon(Icons.bluetooth, color: Colors.grey),
-                  Expanded(child: Text('Bluetooth Health', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: Colors.grey))),
                 ],
               )
             ),

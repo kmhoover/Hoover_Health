@@ -5,12 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:hoov_health/backend/os.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'bluetooth.dart';
 import 'db/db.dart';
 
 class StateModel extends ChangeNotifier {
   DatabaseHelper databaseHelper = DatabaseHelper.instance;
-  BluetoothData? bluetoothData;
   OperatingSystemData? osVersion;
 
   int _wifiHealthScore = -1;
@@ -25,24 +23,13 @@ class StateModel extends ChangeNotifier {
 
   late Map<MetricType, Metric> metricsMap;
 
-  StateModel({
-    required this.bluetoothData,
-  }) {
+  StateModel() {
     initializeMetrics();
   }
 
   // This method initializes metricsMap after the instance is created
   void initializeMetrics() {
     metricsMap = {
-      MetricType.bluetoothHealth: Metric(
-        type: MetricType.bluetoothHealth,
-        title: 'Bluetooth Health',
-        icon: Icons.bluetooth,
-        mainColor: const Color.fromARGB(255, 123, 212, 234),
-        secondaryColor: const Color.fromARGB(255, 123, 212, 234),
-        score: 69,
-        page_url: '/bluetoothHealth',
-      ),
       MetricType.wifiHealth: Metric(
         type: MetricType.wifiHealth,
         title: 'Wifi Health',
@@ -123,7 +110,6 @@ class StateModel extends ChangeNotifier {
 Future<List<String>> _loadMetricAssets() async {
   final directory = await getApplicationDocumentsDirectory();
   final List<File> files = [
-    File('${directory.path}/bluetooth.json'),
     File('${directory.path}/os_version.json'),
     File('${directory.path}/port_info.json'),
     File('${directory.path}/running_apps.json'),
@@ -145,7 +131,6 @@ Future<List<String>> _loadMetricAssets() async {
   }
 
   return await Future.wait([
-    rootBundle.loadString('assets/bluetooth.json'),
     rootBundle.loadString('assets/os_version.json'),
     rootBundle.loadString('assets/port_info.json'),
     rootBundle.loadString('assets/running_apps.json'),
@@ -161,7 +146,6 @@ Future<List<Map<String, dynamic>>> loadMetricJsons() async {
 
 enum MetricType {
   overallHealth,
-  bluetoothHealth,
   wifiHealth,
   systemHealth,
   otherHealth,
@@ -169,7 +153,6 @@ enum MetricType {
 
 const Map<MetricType, IconData> metricIcons = {
   MetricType.overallHealth: Icons.favorite,
-  MetricType.bluetoothHealth: Icons.bluetooth,
   MetricType.wifiHealth: Icons.wifi,
   MetricType.systemHealth: Icons.computer,
   MetricType.otherHealth: Icons.devices_other,
@@ -177,7 +160,6 @@ const Map<MetricType, IconData> metricIcons = {
 
 const Map<MetricType, String> metricPageUrls = {
   MetricType.overallHealth: '/overallHealth',
-  MetricType.bluetoothHealth: '/bluetoothHealth',
   MetricType.wifiHealth: '/wifiHealth',
   MetricType.systemHealth: '/systemHealth',
   MetricType.otherHealth: '/otherHealth',

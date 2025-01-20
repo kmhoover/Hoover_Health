@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:hoov_health/pages/bluetooth_page.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/dashboard.dart';
 import 'pages/network.dart';
 import 'pages/applications.dart';
 import 'pages/system.dart';
-
-import 'backend/bluetooth.dart';
 import 'backend/state.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensure the binding is initialized
-  Map<String, dynamic> bluetoothJson = await loadBluetoothJson();
-  BluetoothData bluetoothData = BluetoothData.fromJson(bluetoothJson);
 
   runApp(
     ChangeNotifierProvider(
-      create: (context) => StateModel(bluetoothData: bluetoothData),
+      create: (context) => StateModel(),
       child: const MyApp(),
     ),
   );
@@ -45,7 +40,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MyHomePage(title: 'HoovHealth'),
         '/dashboard': (context) => const Dashboard(),
-        '/bluetooth': (context) => const BluetoothPage(),
         '/network': (context) => const Network(),
         '/applications': (context) => const Applications(),
         '/system': (context) => const System(),
@@ -95,17 +89,6 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, '/network');
-              }
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.bluetooth,
-                size: 40,
-              ),
-              title: const Text("B L U E T O O T H"),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/bluetooth');
               }
             ),
             ListTile(

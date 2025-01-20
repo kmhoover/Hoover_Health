@@ -54,5 +54,7 @@ class AppDelegate: FlutterAppDelegate {
                 result(FlutterMethodNotImplemented)
             }
         }
+
+        
     }
 }
