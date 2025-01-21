@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 int networkHealthScore(Map<String, dynamic> wifiInfo) {
   const weightRSSI = 0.4; // Strong signal
   const weightNoise = 0.3; // Low noise
@@ -26,4 +28,23 @@ int networkHealthScore(Map<String, dynamic> wifiInfo) {
 
   // Scale to 100
   return (healthScore * 100).round();
+}
+
+/// Determines if the application is trusted based on its bundle identifier.
+bool isTrustedApp(String bundleIdentifier) {
+  return bundleIdentifier.startsWith('com.apple') || bundleIdentifier.startsWith('com.microsoft');
+}
+
+/// Returns the appropriate icon (green checkmark for trusted apps, red question mark for others).
+Widget getAppStatusIcon(String bundleIdentifier) {
+  bool trusted = isTrustedApp(bundleIdentifier);
+  return Positioned(
+    top: 5,
+    right: 5,
+    child: Icon(
+      trusted ? Icons.check_circle : Icons.help,
+      color: trusted ? Colors.green : Colors.red,
+      size: 20,
+    ),
+  );
 }

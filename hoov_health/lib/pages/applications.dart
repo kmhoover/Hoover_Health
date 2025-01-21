@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import '../backend/applications.dart';
 
 class Applications extends StatefulWidget {
@@ -14,6 +13,9 @@ class _ApplicationsState extends State<Applications> {
   static const platform = MethodChannel('com.example.process_info');
 
   List<ProcessInfo> appInfo = [];
+  List<String> trustedApps = [];
+  List<String> suspiciousApps = [];
+  int securityScore = 100; // Example security score
 
   Future<void> fetchAppInfo() async {
     try {
@@ -22,12 +24,44 @@ class _ApplicationsState extends State<Applications> {
         var processesList = result?['processes'] as List<dynamic> ?? [];
         appInfo = processesList.map<ProcessInfo>((processJson) {
           var processMap = Map<String, dynamic>.from(processJson as Map);
-          return ProcessInfo.fromJson(processMap);
+          var process = ProcessInfo.fromJson(processMap);
+
+          if (process.bundleIdentifier.startsWith('com.apple') || process.bundleIdentifier.startsWith('com.microsoft')) {
+            trustedApps.add(process.localizedName);
+          }
+
+          return process;
         }).toList();
+        updateSecurityScore();
       });
     } on PlatformException catch (e) {
       print("Failed to get application info: '${e.message}'.");
     }
+  }
+
+  void trustApplication(String appName) {
+    setState(() {
+      if (!trustedApps.contains(appName)) {
+        trustedApps.add(appName);
+        suspiciousApps.remove(appName);
+        updateSecurityScore();
+      }
+    });
+  }
+
+  void markAsSuspicious(String appName) {
+    setState(() {
+      if (!suspiciousApps.contains(appName)) {
+        suspiciousApps.add(appName);
+        trustedApps.remove(appName);
+        updateSecurityScore();
+      }
+    });
+  }
+
+  void updateSecurityScore() {
+    int newScore = 100 - (suspiciousApps.length * 10);
+    securityScore = newScore.clamp(0, 100);
   }
 
   @override
@@ -43,7 +77,27 @@ class _ApplicationsState extends State<Applications> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            // Search Icon centered in the middle without the blue bar
+            // Security Score at the top
+            Center(
+              child: Column(
+                children: [
+                  Text(
+                    'Security Score: $securityScore',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: securityScore > 60
+                          ? Colors.green
+                          : securityScore > 30
+                              ? Colors.orange
+                              : Colors.red,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
+            ),
+            // Scan Button
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +105,7 @@ class _ApplicationsState extends State<Applications> {
                   IconButton(
                     onPressed: fetchAppInfo,
                     icon: const Icon(Icons.search, size: 70, color: Colors.white),
-                    padding: EdgeInsets.zero, // No padding to make it centered
+                    padding: EdgeInsets.zero,
                   ),
                   const SizedBox(height: 10),
                   const Text(
@@ -73,7 +127,7 @@ class _ApplicationsState extends State<Applications> {
             const SizedBox(height: 10),
             Expanded(
               child: GridView.builder(
-                shrinkWrap: true, // Ensure GridView doesn't take full available space
+                shrinkWrap: true,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   childAspectRatio: 4,
@@ -83,6 +137,9 @@ class _ApplicationsState extends State<Applications> {
                 itemCount: appInfo.length,
                 itemBuilder: (context, index) {
                   var entry = appInfo[index];
+                  bool isTrusted = trustedApps.contains(entry.localizedName);
+                  bool isSuspicious = suspiciousApps.contains(entry.localizedName);
+
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: ElevatedButton(
@@ -109,19 +166,49 @@ class _ApplicationsState extends State<Applications> {
                             ),
                             actions: [
                               TextButton(
+                                onPressed: () {
+                                  trustApplication(entry.localizedName);
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  'Trust This Application',
+                                  style: TextStyle(color: Colors.green),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  markAsSuspicious(entry.localizedName);
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  'Mark as Suspicious',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                              TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                child: const Text('Close'),
+                                child: const Text(
+                                  'Close',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                             ],
                           ),
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.deepPurple,
+                        backgroundColor: isSuspicious
+                            ? Colors.red
+                            : isTrusted
+                                ? Colors.green
+                                : Colors.deepPurple,
                       ),
-                      child: Text(
-                        entry.localizedName,
-                        style: const TextStyle(color: Colors.white),
+                      child: Center(
+                        child: Text(
+                          entry.localizedName,
+                          style: const TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   );
