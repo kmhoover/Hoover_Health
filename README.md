@@ -1,27 +1,24 @@
-Lets scan some shit and make a badass dashboard
+Welcome to my system monitoring tool!
+- I have taken inspiration from osquery to develop scans in C to pull system, wifi, and application information
+- I then display the information using Flutter and encorporate Dart to allow the user to interact with the application
+- The user can see a score related to each scan based on various factors:
+  Wifi
+      - Wifi stength
+      - Wifi encruption
+  System
+      - Is the device fully up to date?
+  Application
+      - Are the applications signed by a trusted source
+      - User can mark unknown applications as suspicious for further investigation
 
-Hoover Next Task:
-- Integrate Bluetooth scan
-
-Formatting Tasks:
-- Make pages look nice
-- Don't populate pages before first scan
-- Have home page health scores updated based on side pages
 
 Health Scores
 - Available:
     - Wifi
-- Still need:
     - System
-          - Is device fully updated?
-          - Long uptime
     - Application
-          - Contains verified bundle identifier
-          - If new, make user confirm they installed/okay with it
-          - Can I have user end process by clicking a button?? 
-      - Bluetooth
-          - List of safe/expected devices
-          - Can I have user disconnect bluetooth?
+
+
 
 Scans I want
 - Process run on startup
