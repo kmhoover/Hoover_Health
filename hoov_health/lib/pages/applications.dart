@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../backend/applications.dart';
+import 'package:provider/provider.dart';
+import 'package:hoov_health/backend/state.dart';
 
 class Applications extends StatefulWidget {
   const Applications({super.key});
@@ -62,6 +64,10 @@ class _ApplicationsState extends State<Applications> {
   void updateSecurityScore() {
     int newScore = 100 - (suspiciousApps.length * 10);
     securityScore = newScore.clamp(0, 100);
+    
+    // Update the StateModel with the new score
+    final stateModel = Provider.of<StateModel>(context, listen: false);
+    stateModel.updateAppHealthScore(securityScore);  // Update the app health score
   }
 
   @override

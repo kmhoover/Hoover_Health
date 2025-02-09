@@ -30,7 +30,9 @@ class _MetricHealthWidgetState extends State<MetricHealthWidget> {
   Widget build(BuildContext context) {
     return Consumer<StateModel>(
       builder: (context, stateModel, child) {
-        int score = widget.title == 'Wifi Health' ? stateModel.wifiHealthScore : 69; // Default or other metric score
+        int score = widget.title == 'Wifi Health' ? stateModel.wifiHealthScore 
+        : widget.title == 'Application Health' ? stateModel.appHealthScore 
+        : 71; // Default or other metric score
 
         return AnimatedContainer(
           duration: const Duration(milliseconds: 200),
@@ -47,6 +49,13 @@ class _MetricHealthWidgetState extends State<MetricHealthWidget> {
                   print('Wi-Fi score is available: $score');
                 } else {
                   Navigator.pushNamed(context, '/network');
+                }
+              }else if (widget.title == 'Application Health') {
+                print('App Health Score: $score');
+                if (score != -1) {
+                  print('Application score is available: $score');
+                } else {
+                  Navigator.pushNamed(context, '/applications');
                 }
               } else {
                 Navigator.pushNamed(context, widget.page_url);

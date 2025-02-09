@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         '/applications': (context) => const Applications(),
         '/system': (context) => const System(),
         '/systemHealth': (context) => const MyHomePage(title: 'System Health'),
-        '/otherHealth': (context) => const MyHomePage(title: 'Other Health'),
+        '/applicationHealth': (context) => const MyHomePage(title: 'Application Health'),
         '/overallHealth': (context) => const MyHomePage(title: 'Overall Health'),
       },
     );

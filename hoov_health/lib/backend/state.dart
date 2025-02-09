@@ -13,11 +13,20 @@ class StateModel extends ChangeNotifier {
 
   int _wifiHealthScore = -1;
 
+  int _appHealthScore = -1;
+
   int get wifiHealthScore => _wifiHealthScore;
   void updateWifiHealthScore(int score) {
     _wifiHealthScore = score;
     print('State health Score: ${_wifiHealthScore}');
-    notifyListeners(); // This will notify the consumers to update
+    notifyListeners();
+  }
+
+  int get appHealthScore => _appHealthScore;
+  void updateAppHealthScore(int score) {
+    _appHealthScore = score;
+    print('State health Score: ${_appHealthScore}');
+    notifyListeners();
   }
   
 
@@ -45,17 +54,17 @@ class StateModel extends ChangeNotifier {
         icon: Icons.computer,
         mainColor: const Color.fromARGB(255, 255, 208, 150),
         secondaryColor: const Color.fromARGB(255, 255, 208, 150),
-        score: 69,
+        score: 70,
         page_url: '/systemHealth',
       ),
       MetricType.otherHealth: Metric(
         type: MetricType.otherHealth,
-        title: 'Other Health',
+        title: 'Application Health',
         icon: Icons.devices_other,
         mainColor: const Color.fromARGB(255, 190, 173, 250),
         secondaryColor: const Color.fromARGB(255, 190, 173, 250),
-        score: 69,
-        page_url: '/otherHealth',
+        score: _appHealthScore,
+        page_url: '/applicationHealth',
       ),
     };
   }
